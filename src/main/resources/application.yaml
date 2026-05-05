@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: testlogs
+  main:
+    banner-mode: "off"
+
+server:
+  shutdown: graceful
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    root: INFO
+    com.tutorial.testlogs: DEBUG
+    org.springframework: INFO
+  include-application-name: false
+  exception-conversion-word: "%wEx"
+  pattern:
+    correlation: "[${spring.application.name:app},traceId=%X{traceId:-},spanId=%X{spanId:-}] "
+  structured:
+    format:
+      console: logstash
+    json:
+      add:
+        service:
+          name: ${spring.application.name}
+        service.version: ${APP_VERSION:unknown}
+        service.environment: ${APP_ENV:local}
+        cloud.region: ${CLOUD_REGION:unknown}
