@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logs-tutorial.png" alt="Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)" width="100%" maxHeight="400px" style="object-fit: cover;">
+</p>
+
 # Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)
 
 Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback en tests unitarios usando `ListAppender` de Logback. Incluye utilidades helper para reducir boilerplate en tests y ejemplos exhaustivos de aserciones: nivel del log, textos fijos, partes dinámicas, excepciones, MDC y orden de eventos. También ampliamos las secciones teóricas con casos reales de problemas empresariales relacionados con logging y observabilidad.
@@ -12,6 +16,7 @@ Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback 
 - [Ejemplos de tests usando los helpers](#ejemplos-tests)
 - [Aserciones y patterns recomendados (resumen práctico)](#aserciones-patterns)
 - [Buenas prácticas](#buenas-practicas)
+- [Casos_de_éxito](#casos_exito)
 - [Conclusiones](#conclusiones)
 
 ---
@@ -464,6 +469,12 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar `d
 - Verifica siempre camino feliz y edge cases (entrada vacía, solo numéricos, mezcla de categorías).
 - Incluye pruebas de contrato de configuración (`application.yaml`) para detectar regresiones tempranas.
 - Evita duplicar utilidades de captura de logs; reutiliza una sola API de assertions en todo el proyecto.
+
+---
+
+<a id="conclusiones"></a>
+## Conclusiones
+
 
 ---
 
