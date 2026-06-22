@@ -122,11 +122,11 @@ Con este enfoque se detectan regresiones funcionales y de observabilidad antes d
 <parent>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-parent</artifactId>
-  <version>4.0.6</version>
+  <version>4.1.0</version>
 </parent>
 
 <properties>
-  <java.version>21</java.version>
+  <java.version>25</java.version>
 </properties>
 
 <dependencies>
