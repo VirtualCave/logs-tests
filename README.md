@@ -472,9 +472,25 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar `d
 
 ---
 
-<a id="conclusiones"></a>
-## Conclusiones
+<a id="casos_exito"></a>
+## Casos de éxito: Empresas que ganaron optimizando sus logs
 
+Tratar los logs como un contrato de software (y validarlos de forma automatizada en tests) no es solo una buena práctica de código; tiene un impacto directo en la reducción del MTTR (Mean Time to Resolution) y en el ahorro de millones de dólares en infraestructura cloud. A continuación, se detallan tres casos reales de la industria tecnológica:
+
+### 1. Uber: Reducción de costes de almacenamiento en un 17x usando compresión estructurada
+* **El problema**: El crecimiento de su plataforma de Big Data (clústeres Spark) provocó que los servicios generaran hasta **200 TB de logs al día** en su nivel por defecto (`INFO`). Almacenar este volumen durante un mes implicaba un coste prohibitivo de **1.8 millones de dólares al año**. Para frenar el gasto, la empresa recortó la retención a solo 3 días y configuró el nivel global en `WARN`, dejando a sus ingenieros sin la visibilidad necesaria para diagnosticar fallos en producción.
+* **La solución**: Integraron un procesador de logs comprimidos (CLP o *Compressed Log Processor*) directamente como un `Appender` personalizado en su biblioteca de logging (Log4j). Este componente identifica las partes estáticas del mensaje y codifica las variables repetitivas (como IDs de contenedores o tareas) antes de escribirlas en el disco.
+* **La ganancia**: Alcanzaron un **ratio de compresión de 169x**, lo que redujo los costes de almacenamiento de logs en un **17x**. Gracias a esta eficiencia, el equipo pudo restaurar el nivel a `INFO` y multiplicar por diez el tiempo de retención, recuperando la capacidad completa de diagnóstico sin disparar la factura tecnológica.
+
+### 2. Airbnb: Migración a OpenTelemetry y ahorro de costes en un orden de magnitud (10x)
+* **El problema**: Airbnb dependía en gran medida de proveedores externos para centralizar su observabilidad. Al estar los modelos de precios basados estrictamente en el volumen de ingesta de datos, los costes se disparaban exponencialmente a medida que escalaba la plataforma, sin que ello se tradujera en una resolución de incidentes más veloz.
+* **La solución**: Diseñaron e implementaron una arquitectura de observabilidad interna construida sobre componentes de código abierto como **OpenTelemetry** y herramientas de agregación optimizadas (`vmagent`). El núcleo de la solución consistió en aplicar capas de enrutamiento distribuidas capaces de agrupar y limpiar metadatos redundantes y logs repetitivos antes de su persistencia.
+* **La ganancia**: Consiguieron centralizar y procesar más de **100 millones de muestras métricas y líneas por segundo** bajo un único clúster de producción. Esto se tradujo en una **reducción de costes de observabilidad de 10x (un orden de magnitud)**, devolviendo el control del flujo de telemetría directamente a sus equipos de ingeniería.
+
+### 3. Stripe: El patrón "Canonical Log Lines" para depuración instantánea
+* **El problema**: En una arquitectura de pagos distribuidos, una sola transacción HTTP pasa por autenticación, filtros de tasa de transferencia, análisis de fraude y bases de datos, generando docenas de líneas de logs dispersas. Cuando ocurría un fallo intermitente bajo un volumen de miles de millones de peticiones, correlacionar e indexar texto libre a través de múltiples microservicios ralentizaba las investigaciones en momentos críticos.
+* **La solución**: Stripe estandarizó el uso de ***Canonical Log Lines***. Utilizando interceptores/middlewares automáticos, cada módulo del sistema decora un objeto contextual compartido a lo largo del ciclo de vida de la solicitud. Al finalizar la transacción (incluso si falla catastróficamente), el servicio emite **una única línea de log estructurada masiva (fat log line)** en formato JSON o Protocol Buffers con todo el resumen del estado operativo.
+* **La ganancia**: Redujo el tiempo de búsqueda y análisis en herramientas de indexación a escasos **segundos**. Al estar los campos estructurados contractualmente, los ingenieros pueden consultar latencias por endpoint, versiones TLS específicas de clientes o tasas de error de un usuario en una sola línea de query, abaratando sustancialmente el coste de análisis histórico sobre almacenes de datos analíticos.
 
 ---
 
