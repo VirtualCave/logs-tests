@@ -55,4 +55,4 @@ Un sistema que no se valida activamente da una falsa sensación de seguridad. Pu
 
 ---
 
-> **¿Trabajas con Java y Spring Boot?** Hemos publicado tutoriales prácticos para equipos que quieren detectar estos problemas antes de que sea tarde. ¡Revisa nuestra guía completa!
+¿Trabajas con Java y Spring Boot?** Hemos publicado tutoriales prácticos para equipos que quieren detectar estos problemas antes de que sea tarde. ¡Revisa nuestra guía completa!
