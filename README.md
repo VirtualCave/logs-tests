@@ -173,7 +173,7 @@ Presentamos `LogCaptor`, una pequeña utilidad que envuelve `ListAppender` y sim
 
 Archivo: LogCaptor.java
 
-```java name=LogCaptor.java
+```java
 public final class LogCaptor implements AutoCloseable {
     private final Logger logger;
     private final ListAppender<ILoggingEvent> appender;
@@ -239,7 +239,7 @@ public final class LogCaptor implements AutoCloseable {
 
 Archivo: LogAssertions.java
 
-```java name=LogAssertions.java
+```java
 public final class LogAssertions {
 
     private LogAssertions() {
@@ -330,7 +330,7 @@ Estas utilidades simplifican el patrón repetitivo de attach/detach y ofrecen fu
 
 Ejemplo 1 — clasificación y logs INFO vía controlador:
 
-```java name=ExampleControllerIntegrationTest.java
+```java
 @Test
 void processClassifiesCorrectlyThroughController() throws Exception {
     List<String> input = List.of("hi", "hello", "thisisalongstring", "42", "3.14", "world");
@@ -354,7 +354,7 @@ void processClassifiesCorrectlyThroughController() throws Exception {
 
 Ejemplo 2 — entrada vacía y log WARN:
 
-```java name=ExampleControllerIntegrationTest.java
+```java
 @Test
 void processEmptyInputReturnsEmptyListsAndWarnLog() throws Exception {
     try (LogCaptor lc = LogCaptor.forClass(ExampleService.class)) {
@@ -375,7 +375,7 @@ void processEmptyInputReturnsEmptyListsAndWarnLog() throws Exception {
 
 Ejemplo 3 — validación de MDC:
 
-```java name=ExampleControllerIntegrationTest.java
+```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ExampleControllerIntegrationTest {
 
@@ -411,7 +411,7 @@ class ExampleControllerIntegrationTest {
 
 Ejemplo 4 — validación de logs estructurados en consola:
 
-```java name=ExampleControllerIntegrationTest.java
+```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(OutputCaptureExtension.class)
 class ExampleControllerIntegrationTest {
