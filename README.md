@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logs-tutorial.png" alt="Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)" width="100%" maxHeight="400px" style="object-fit: cover;">
+  <img src="assets/header.png" alt="Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)" width="100%" maxHeight="400px" style="object-fit: cover;">
 </p>
 
 # Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)
