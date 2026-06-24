@@ -4,7 +4,7 @@
 
 # Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)
 
-Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback en tests unitarios usando `ListAppender` de Logback. Incluye utilidades helper para reducir boilerplate en tests y ejemplos exhaustivos de aserciones: nivel del log, textos fijos, partes dinámicas, excepciones, MDC y orden de eventos. También ampliamos las secciones teóricas con casos reales de problemas empresariales relacionados con logging y observabilidad.
+Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback en tests unitarios usando ListAppender de Logback. Incluye utilidades helper para reducir boilerplate en tests y ejemplos exhaustivos de aserciones: nivel del log, textos fijos, partes dinámicas, excepciones, MDC y orden de eventos. También ampliamos las secciones teóricas con casos reales de problemas empresariales relacionados con logging y observabilidad.
 
 ## Índice
 - [Por qué validar logs en tests](#por-que-validar-logs)
@@ -32,7 +32,7 @@ Validar logs en tests aporta garantías sobre la observabilidad y el diagnóstic
 
 2) Validar presencia de contexto (traceId, requestId, userId)
 - Por qué: Sin identificadores correlacionables, los SREs y desarrolladores pierden la capacidad de rastrear incidentes entre servicios.
-- Caso real típico: En una plataforma B2B, al eliminarse el `traceId` del log por un cambio en el formato, las investigaciones de incidentes se alargaron días porque las trazas no podían correlacionarse entre microservicios, afectando SLAs de soporte.
+- Caso real típico: En una plataforma B2B, al eliminarse el traceId del log por un cambio en el formato, las investigaciones de incidentes se alargaron días porque las trazas no podían correlacionarse entre microservicios, afectando SLAs de soporte.
 
 3) Evitar fugas de datos sensibles (PII)
 - Por qué: Logs que contienen contraseñas, tarjetas o información personal pueden suponer incumplimiento de GDPR o PCI-DSS.
@@ -43,12 +43,12 @@ Validar logs en tests aporta garantías sobre la observabilidad y el diagnóstic
 - Caso real típico: Un mensaje de excepción fue editado y dejó de coincidir con la regla de parsing del SIEM; como resultado, alertas críticas no se activaron y se produjo una degradación prolongada.
 
 5) Mejorar la calidad de mensajes (estructura y semántica)
-- Por qué: Validar que los logs contienen campos clave permite construir dashboards y métricas derivadas de logs (p. ej. conteo por `errorCode`).
-- Caso real típico: Un equipo incluyó `errorCode` en logs y una prueba de contrato garantizó que el campo siempre estaba presente; esto permitió crear alertas por `errorCode` rápidamente.
+- Por qué: Validar que los logs contienen campos clave permite construir dashboards y métricas derivadas de logs (p. ej. conteo por errorCode ).
+- Caso real típico: Un equipo incluyó errorCode en logs y una prueba de contrato garantizó que el campo siempre estaba presente; esto permitió crear alertas por errorCode rápidamente.
 
 6) Controlar coste y rendimiento de la observabilidad
 - Por qué: Logs excesivos incrementan costes de ingestión, almacenamiento y consulta (p. ej. en Elastic, Datadog, Splunk).
-- Caso real típico: After-deploy con `DEBUG` activado en un servicio de alta tasa generó 10x logs, saturando la pipeline de ingestión y ocasionando una factura de observabilidad inesperada en producción.
+- Caso real típico: After-deploy con DEBUG activado en un servicio de alta tasa generó 10x logs, saturando la pipeline de ingestión y ocasionando una factura de observabilidad inesperada en producción.
 
 En resumen: validar logs en tests es parte de la calidad del software y de la higiene operativa. No se trata solo de "siempre loguear", sino de "loguear bien" teniendo en cuenta que entornos cloud tanto la cantidad de logs como su formato son susceptibles de leerse por humanos pero también por servicios.
 
@@ -59,16 +59,16 @@ En resumen: validar logs en tests es parte de la calidad del software y de la hi
 
 Casos públicos conocidos (y su impacto):
 
-- `Equifax (2017)`: durante el incidente de Apache Struts, se reportó que un certificado TLS de inspección estuvo caducado durante meses.
+- Equifax (2017) : durante el incidente de Apache Struts, se reportó que un certificado TLS de inspección estuvo caducado durante meses.
   Impacto: el tráfico no se inspeccionó como se esperaba y se retrasó la detección de actividad maliciosa, ampliando la ventana del ataque.
 
-- `Capital One (2019)`: en el análisis posterior del incidente se destacó la importancia de trazabilidad y monitorización sobre acceso a recursos cloud.
+- Capital One (2019) : en el análisis posterior del incidente se destacó la importancia de trazabilidad y monitorización sobre acceso a recursos cloud.
   Impacto: exposición masiva de datos y costes regulatorios/reputacionales muy altos; reforzó la necesidad de auditoría y alertas de seguridad bien configuradas.
 
-- `GitLab (2017)`: aunque el caso fue principalmente de backup/operación, la cronología pública mostró problemas de visibilidad operativa en tiempo real.
+- GitLab (2017) : aunque el caso fue principalmente de backup/operación, la cronología pública mostró problemas de visibilidad operativa en tiempo real.
   Impacto: pérdida de datos de producción y caída prolongada del servicio; evidenció la necesidad de observabilidad y señales accionables durante incidentes.
 
-- `Incidentes de facturación en plataformas de observabilidad (patrón recurrente)`: varios postmortems públicos describen subidas bruscas de coste por exceso de logs `DEBUG` o alta cardinalidad.
+- Incidentes de facturación en plataformas de observabilidad (patrón recurrente) : varios postmortems públicos describen subidas bruscas de coste por exceso de logs DEBUG o alta cardinalidad.
   Impacto: aumento repentino del coste mensual, degradación en búsquedas y necesidad de aplicar recortes urgentes de logging en producción.
 
 Aquí se describen problemas concretos que ocurren en entornos empresariales grandes y cómo suelen originarse.
@@ -81,7 +81,7 @@ Aquí se describen problemas concretos que ocurren en entornos empresariales gra
 2) Costes en la factura de observabilidad
 - Origen: Niveles demasiado verbosos en producción o logs sin sampling en servicios de alto QPS.
 - Efecto: Incremento en el volumen de datos indexados, consultas más lentas y facturas elevadas por ingestión y egress.
-- Caso: Un servicio de comercio electrónico que procesaba fotos por segundo comenzó a incluir un `toString()` muy verboso en cada request — la factura de logging subió sustancialmente hasta detectarlo.
+- Caso: Un servicio de comercio electrónico que procesaba fotos por segundo comenzó a incluir un toString() muy verboso en cada request — la factura de logging subió sustancialmente hasta detectarlo.
 
 3) Alta cardinalidad de índices y rendimiento degradado
 - Origen: Incluir valores de alta cardinalidad (p. ej. userEmail, full UUID) como etiquetas/fields en logs en lugar de en mensaje estructurado.
@@ -106,10 +106,10 @@ Aquí se describen problemas concretos que ocurren en entornos empresariales gra
 La solución de este proyecto combina validación funcional y validación de observabilidad en una misma suite de tests:
 
 - Pruebas de integración del endpoint para validar respuesta HTTP y payload JSON.
-- Captura de logs del servicio con `LogCaptor` para verificar nivel, contenido y cantidad de eventos.
-- Aserciones reutilizables con `LogAssertions` para reducir boilerplate y estandarizar checks.
-- Validación de contexto de trazas (`traceId`, `spanId`) en MDC para asegurar correlación entre logs.
-- Validación de salida estructurada en consola (`CapturedOutput`) para confirmar campos clave de logging.
+- Captura de logs del servicio con LogCaptor para verificar nivel, contenido y cantidad de eventos.
+- Aserciones reutilizables con LogAssertions para reducir boilerplate y estandarizar checks.
+- Validación de contexto de trazas ( traceId , spanId ) en MDC para asegurar correlación entre logs.
+- Validación de salida estructurada en consola ( CapturedOutput ) para confirmar campos clave de logging.
 
 Con este enfoque se detectan regresiones funcionales y de observabilidad antes de llegar a producción.
 
@@ -155,12 +155,12 @@ Con este enfoque se detectan regresiones funcionales y de observabilidad antes d
 <a id="patron-basico"></a>
 ## Patrón básico con ListAppender (recordatorio rápido)
 
-- Obtener logger: `Logger logger = (Logger) LoggerFactory.getLogger(Clase.class);`
-- Crear listAppender: `ListAppender<ILoggingEvent> appender = new ListAppender<>();`
-- `appender.start(); logger.addAppender(appender);`
+- Obtener logger: Logger logger = (Logger) LoggerFactory.getLogger(Clase.class); 
+- Crear listAppender: ListAppender<ILoggingEvent> appender = new ListAppender<>(); 
+- appender.start(); logger.addAppender(appender); 
 - Ejecutar la lógica.
-- Leer `appender.list` (List<ILoggingEvent>).
-- Cleanup: `logger.detachAppender(appender); appender.stop();`
+- Leer appender.list (List<ILoggingEvent>).
+- Cleanup: logger.detachAppender(appender); appender.stop(); 
 
 Este patrón funciona pero se repite en muchos tests; por eso añadimos helpers.
 
@@ -169,7 +169,7 @@ Este patrón funciona pero se repite en muchos tests; por eso añadimos helpers.
 <a id="utilidades-helper"></a>
 ## Utilidades helper para reducir código en tests
 
-Presentamos `LogCaptor`, una pequeña utilidad que envuelve `ListAppender` y simplifica su uso con `try-with-resources`. También incluimos `LogAssertions` con aserciones frecuentes.
+Presentamos LogCaptor , una pequeña utilidad que envuelve ListAppender y simplifica su uso con try-with-resources . También incluimos LogAssertions con aserciones frecuentes.
 
 Archivo: LogCaptor.java
 
@@ -321,7 +321,7 @@ public final class LogAssertions {
 }
 ```
 
-Estas utilidades simplifican el patrón repetitivo de attach/detach y ofrecen funciones frecuentes como `assertContains`, `assertLevelCount`, `assertMdcFieldMatches` y aserciones sobre logs estructurados.
+Estas utilidades simplifican el patrón repetitivo de attach/detach y ofrecen funciones frecuentes como assertContains , assertLevelCount , assertMdcFieldMatches y aserciones sobre logs estructurados.
 
 ---
 
@@ -444,30 +444,30 @@ class ExampleControllerIntegrationTest {
 }
 ```
 
-Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar `detach` o `stop`.
+Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar detach o stop .
 
 ---
 
 <a id="aserciones-patterns"></a>
 ## Aserciones y patterns recomendados (resumen práctico)
 
-- `Código HTTP`: valida `response.statusCode()` antes de cualquier aserción de logs.
-- `Resultado funcional`: comprueba la respuesta JSON (clasificación) además del log; evita tests acoplados solo al texto.
-- `Nivel y contenido`: usa `assertContains` + `assertLevelCount` para asegurar semántica y volumen esperado.
-- `MDC`: valida `traceId` y `spanId` con regex (`assertMdcFieldMatches`) en niveles concretos.
-- `Logs estructurados`: usa `assertStructuredFieldExists`, `assertStructuredField` y `assertStructuredFieldMatches` sobre `CapturedOutput`.
-- `Configuración`: añade aserciones de propiedades (`assertProperty`) para congelar contratos de logging/tracing.
+- Código HTTP : valida response.statusCode() antes de cualquier aserción de logs.
+- Resultado funcional : comprueba la respuesta JSON (clasificación) además del log; evita tests acoplados solo al texto.
+- Nivel y contenido : usa assertContains + assertLevelCount para asegurar semántica y volumen esperado.
+- MDC : valida traceId y spanId con regex ( assertMdcFieldMatches ) en niveles concretos.
+- Logs estructurados : usa assertStructuredFieldExists , assertStructuredField y assertStructuredFieldMatches sobre CapturedOutput .
+- Configuración : añade aserciones de propiedades ( assertProperty ) para congelar contratos de logging/tracing.
 
 ---
 
 <a id="buenas-practicas"></a>
 ## Buenas prácticas
 
-- Centraliza helpers (`LogCaptor`, `LogAssertions`) para reducir boilerplate y mantener consistencia entre pruebas.
+- Centraliza helpers ( LogCaptor , LogAssertions ) para reducir boilerplate y mantener consistencia entre pruebas.
 - Prioriza pruebas de integración HTTP para validar observabilidad real (MDC + salida estructurada), no solo logs internos.
 - Mantén aserciones estables: busca fragmentos relevantes y regex de formato, evitando acoplarte a mensajes completos.
 - Verifica siempre camino feliz y edge cases (entrada vacía, solo numéricos, mezcla de categorías).
-- Incluye pruebas de contrato de configuración (`application.yaml`) para detectar regresiones tempranas.
+- Incluye pruebas de contrato de configuración ( application.yaml ) para detectar regresiones tempranas.
 - Evita duplicar utilidades de captura de logs; reutiliza una sola API de assertions en todo el proyecto.
 
 ---
@@ -478,13 +478,13 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar `d
 Tratar los logs como un contrato de software (y validarlos de forma automatizada en tests) no es solo una buena práctica de código; tiene un impacto directo en la reducción del MTTR (Mean Time to Resolution) y en el ahorro de millones de dólares en infraestructura cloud. A continuación, se detallan tres casos reales de la industria tecnológica:
 
 ### 1. Uber: Reducción de costes de almacenamiento en un 17x usando compresión estructurada
-* **El problema**: El crecimiento de su plataforma de Big Data (clústeres Spark) provocó que los servicios generaran hasta **200 TB de logs al día** en su nivel por defecto (`INFO`). Almacenar este volumen durante un mes implicaba un coste prohibitivo de **1.8 millones de dólares al año**. Para frenar el gasto, la empresa recortó la retención a solo 3 días y configuró el nivel global en `WARN`, dejando a sus ingenieros sin la visibilidad necesaria para diagnosticar fallos en producción.
-* **La solución**: Integraron un procesador de logs comprimidos (CLP o *Compressed Log Processor*) directamente como un `Appender` personalizado en su biblioteca de logging (Log4j). Este componente identifica las partes estáticas del mensaje y codifica las variables repetitivas (como IDs de contenedores o tareas) antes de escribirlas en el disco.
-* **La ganancia**: Alcanzaron un **ratio de compresión de 169x**, lo que redujo los costes de almacenamiento de logs en un **17x**. Gracias a esta eficiencia, el equipo pudo restaurar el nivel a `INFO` y multiplicar por diez el tiempo de retención, recuperando la capacidad completa de diagnóstico sin disparar la factura tecnológica.
+* **El problema**: El crecimiento de su plataforma de Big Data (clústeres Spark) provocó que los servicios generaran hasta **200 TB de logs al día** en su nivel por defecto ( INFO ). Almacenar este volumen durante un mes implicaba un coste prohibitivo de **1.8 millones de dólares al año**. Para frenar el gasto, la empresa recortó la retención a solo 3 días y configuró el nivel global en WARN , dejando a sus ingenieros sin la visibilidad necesaria para diagnosticar fallos en producción.
+* **La solución**: Integraron un procesador de logs comprimidos (CLP o *Compressed Log Processor*) directamente como un Appender personalizado en su biblioteca de logging (Log4j). Este componente identifica las partes estáticas del mensaje y codifica las variables repetitivas (como IDs de contenedores o tareas) antes de escribirlas en el disco.
+* **La ganancia**: Alcanzaron un **ratio de compresión de 169x**, lo que redujo los costes de almacenamiento de logs en un **17x**. Gracias a esta eficiencia, el equipo pudo restaurar el nivel a INFO y multiplicar por diez el tiempo de retención, recuperando la capacidad completa de diagnóstico sin disparar la factura tecnológica.
 
 ### 2. Airbnb: Migración a OpenTelemetry y ahorro de costes en un orden de magnitud (10x)
 * **El problema**: Airbnb dependía en gran medida de proveedores externos para centralizar su observabilidad. Al estar los modelos de precios basados estrictamente en el volumen de ingesta de datos, los costes se disparaban exponencialmente a medida que escalaba la plataforma, sin que ello se tradujera en una resolución de incidentes más veloz.
-* **La solución**: Diseñaron e implementaron una arquitectura de observabilidad interna construida sobre componentes de código abierto como **OpenTelemetry** y herramientas de agregación optimizadas (`vmagent`). El núcleo de la solución consistió en aplicar capas de enrutamiento distribuidas capaces de agrupar y limpiar metadatos redundantes y logs repetitivos antes de su persistencia.
+* **La solución**: Diseñaron e implementaron una arquitectura de observabilidad interna construida sobre componentes de código abierto como **OpenTelemetry** y herramientas de agregación optimizadas ( vmagent ). El núcleo de la solución consistió en aplicar capas de enrutamiento distribuidas capaces de agrupar y limpiar metadatos redundantes y logs repetitivos antes de su persistencia.
 * **La ganancia**: Consiguieron centralizar y procesar más de **100 millones de muestras métricas y líneas por segundo** bajo un único clúster de producción. Esto se tradujo en una **reducción de costes de observabilidad de 10x (un orden de magnitud)**, devolviendo el control del flujo de telemetría directamente a sus equipos de ingeniería.
 
 ### 3. Stripe: El patrón "Canonical Log Lines" para depuración instantánea
@@ -497,11 +497,11 @@ Tratar los logs como un contrato de software (y validarlos de forma automatizada
 <a id="conclusiones"></a>
 ## Conclusiones
 
-Validar logs en tests no es un extra, es parte del contrato de calidad y observabilidad del servicio. En este proyecto, la combinación de `LogCaptor` + `LogAssertions` + pruebas de integración en `ExampleControllerIntegrationTest` permite comprobar de forma fiable:
+Validar logs en tests no es un extra, es parte del contrato de calidad y observabilidad del servicio. En este proyecto, la combinación de LogCaptor + LogAssertions + pruebas de integración en ExampleControllerIntegrationTest permite comprobar de forma fiable:
 
 - comportamiento funcional del endpoint,
 - calidad y nivel de los logs,
-- propagación de `traceId`/`spanId`,
+- propagación de traceId / spanId ,
 - y formato estructurado de salida.
 
 Con este enfoque, las regresiones de observabilidad se detectan igual que cualquier regresión funcional antes de llegar a producción.
