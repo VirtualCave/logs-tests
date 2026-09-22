@@ -1,27 +1,7 @@
-<p align="center">
-  <img src="assets/header.png" alt="Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)" width="100%" maxHeight="400px" style="object-fit: cover;">
-</p>
-
 # Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)
 
 Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback en tests unitarios usando ListAppender de Logback. Incluye utilidades helper para reducir boilerplate en tests y ejemplos exhaustivos de aserciones: nivel del log, textos fijos, partes dinámicas, excepciones, MDC y orden de eventos. También ampliamos las secciones teóricas con casos reales de problemas empresariales relacionados con logging y observabilidad.
 
-## Índice
-- [Por qué validar logs en tests](#por-que-validar-logs)
-- [Problemas reales en producción por mala gestión de logs](#problemas-reales-logs)
-- [Propuesta de solución](#propuesta-solucion)
-- [Dependencias (pom.xml mínimo)](#dependencias)
-- [Patrón básico con ListAppender (recordatorio rápido)](#patron-basico)
-- [Utilidades helper para reducir código en tests](#utilidades-helper)
-- [Ejemplos de tests usando los helpers](#ejemplos-tests)
-- [Aserciones y patterns recomendados (resumen práctico)](#aserciones-patterns)
-- [Buenas prácticas](#buenas-practicas)
-- [Casos_de_éxito](#casos_exito)
-- [Conclusiones](#conclusiones)
-
----
-
-<a id="por-que-validar-logs"></a>
 ## Por qué validar logs en tests
 
 Validar logs en tests aporta garantías sobre la observabilidad y el diagnóstico del sistema. A continuación se listan razones y ejemplos reales de impacto empresarial.
@@ -54,7 +34,6 @@ En resumen: validar logs en tests es parte de la calidad del software y de la hi
 
 ---
 
-<a id="problemas-reales-logs"></a>
 ## Problemas reales en producción por mala gestión de logs
 
 Casos públicos conocidos (y su impacto):
@@ -100,7 +79,6 @@ Aquí se describen problemas concretos que ocurren en entornos empresariales gra
 
 ---
 
-<a id="propuesta-solucion"></a>
 ## Propuesta de solución
 
 La solución de este proyecto combina validación funcional y validación de observabilidad en una misma suite de tests:
@@ -115,7 +93,6 @@ Con este enfoque se detectan regresiones funcionales y de observabilidad antes d
 
 ---
 
-<a id="dependencias"></a>
 ## Dependencias (pom.xml mínimo)
 
 ```xml
@@ -152,7 +129,6 @@ Con este enfoque se detectan regresiones funcionales y de observabilidad antes d
 
 ---
 
-<a id="patron-basico"></a>
 ## Patrón básico con ListAppender (recordatorio rápido)
 
 - Obtener logger: Logger logger = (Logger) LoggerFactory.getLogger(Clase.class); 
@@ -166,7 +142,6 @@ Este patrón funciona pero se repite en muchos tests; por eso añadimos helpers.
 
 ---
 
-<a id="utilidades-helper"></a>
 ## Utilidades helper para reducir código en tests
 
 Presentamos LogCaptor , una pequeña utilidad que envuelve ListAppender y simplifica su uso con try-with-resources . También incluimos LogAssertions con aserciones frecuentes.
@@ -325,7 +300,6 @@ Estas utilidades simplifican el patrón repetitivo de attach/detach y ofrecen fu
 
 ---
 
-<a id="ejemplos-tests"></a>
 ## Ejemplos de tests usando los helpers
 
 Ejemplo 1 — clasificación y logs INFO vía controlador:
@@ -448,7 +422,6 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar de
 
 ---
 
-<a id="aserciones-patterns"></a>
 ## Aserciones y patterns recomendados (resumen práctico)
 
 - Código HTTP : valida response.statusCode() antes de cualquier aserción de logs.
@@ -460,7 +433,6 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar de
 
 ---
 
-<a id="buenas-practicas"></a>
 ## Buenas prácticas
 
 - Centraliza helpers ( LogCaptor , LogAssertions ) para reducir boilerplate y mantener consistencia entre pruebas.
@@ -472,7 +444,6 @@ Estos ejemplos muestran tests mucho más concisos y menos propensos a olvidar de
 
 ---
 
-<a id="casos_exito"></a>
 ## Casos de éxito: Empresas que ganaron optimizando sus logs
 
 Tratar los logs como un contrato de software (y validarlos de forma automatizada en tests) no es solo una buena práctica de código; tiene un impacto directo en la reducción del MTTR (Mean Time to Resolution) y en el ahorro de millones de dólares en infraestructura cloud. A continuación, se detallan tres casos reales de la industria tecnológica:
@@ -494,7 +465,6 @@ Tratar los logs como un contrato de software (y validarlos de forma automatizada
 
 ---
 
-<a id="conclusiones"></a>
 ## Conclusiones
 
 Validar logs en tests no es un extra, es parte del contrato de calidad y observabilidad del servicio. En este proyecto, la combinación de LogCaptor + LogAssertions + pruebas de integración en ExampleControllerIntegrationTest permite comprobar de forma fiable:
