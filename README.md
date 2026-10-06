@@ -1,4 +1,4 @@
-# Validación de logs en tests con JUnit 5, Spring Boot y Logback (ListAppender)
+# Validación de logs en tests con JUnit, Spring Boot y Logback (ListAppender)
 
 Este tutorial muestra cómo capturar y validar logs generados por SLF4J/Logback en tests unitarios usando `ListAppender` de Logback. Incluye utilidades helper para reducir boilerplate en tests y ejemplos exhaustivos de aserciones: nivel del log, textos fijos, partes dinámicas, excepciones, MDC y orden de eventos.
 
