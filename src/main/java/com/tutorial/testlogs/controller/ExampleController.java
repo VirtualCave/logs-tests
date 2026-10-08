@@ -19,8 +19,8 @@ public class ExampleController {
     private final ExampleService exampleService;
 
     @PostMapping(path = "/process", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<String>> process(@RequestBody List<String> input) {
-        return exampleService.process(input);
+    public Map<String, List<String>> process(@RequestBody List<String> strings) {
+        return exampleService.process(strings);
     }
 }
 
